@@ -5,7 +5,10 @@ from dotenv import load_dotenv
 from openai import OpenAI
 
 from order_tools import get_order_summary, get_order_by_id
-
+TOOL_HANDLERS = {
+    "get_order_summary": get_order_summary,
+    "get_order_by_id": get_order_by_id,
+}
 
 load_dotenv()
 
@@ -87,12 +90,11 @@ else:
 
     for tool_call in assistant_message.tool_calls:
         arguments = json.loads(tool_call.function.arguments)
-        if tool_call.function.name == "get_order_summary":
-            tool_result = get_order_summary(**arguments)
-        elif tool_call.function.name == "get_order_by_id":
-            tool_result = get_order_by_id(**arguments)
-        else:
+        tool_handler = TOOL_HANDLERS.get(tool_call.function.name)
+        if tool_handler is None:
             raise ValueError(f"未知工具：{tool_call.function.name}")
+
+        tool_result = tool_handler(**arguments)
         messages.append(
             {
                 "role": "tool",
