@@ -1,8 +1,16 @@
-ORDERS = [
-    {"id": 101, "amount": 59.9, "user": "小王"},
-    {"id": 102, "amount": 235.5, "user": "小李"},
-    {"id": 103, "amount": 500, "user": "小张"},
-]
+import json
+from pathlib import Path
+
+
+ORDERS_FILE = Path(__file__).with_name("orders.json")
+
+
+def load_orders() -> list[dict]:
+    with ORDERS_FILE.open(encoding="utf-8") as file:
+        return json.load(file)
+
+
+ORDERS = load_orders()
 
 
 def get_order_summary(minimum_amount: float) -> dict:
