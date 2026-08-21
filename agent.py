@@ -121,4 +121,7 @@ if __name__ == "__main__":
             print("问题不能为空。")
             continue
 
-        print(ask_agent(user_question))
+        try:
+            print(ask_agent(user_question))
+        except Exception as error:
+            print(f"本次处理失败：{error}")
