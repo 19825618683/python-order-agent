@@ -1,3 +1,9 @@
+from pathlib import Path
+from tempfile import TemporaryDirectory
+from unittest.mock import patch
+
+import order_tools
+
 import unittest
 
 from order_tools import get_order_by_id, get_order_summary
@@ -21,6 +27,13 @@ class OrderToolsTest(unittest.TestCase):
         self.assertEqual(result["count"], 2)
         self.assertEqual(result["users"], ["小李", "小张"])
 
+    def test_missing_orders_file(self):
+        with TemporaryDirectory() as directory:
+            missing_file = Path(directory) / "missing-orders.json"
+
+            with patch.object(order_tools, "ORDERS_FILE", missing_file):
+                with self.assertRaisesRegex(RuntimeError, "找不到订单数据文件"):
+                    order_tools.load_orders()
 
 if __name__ == "__main__":
     unittest.main()

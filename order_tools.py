@@ -6,8 +6,13 @@ ORDERS_FILE = Path(__file__).with_name("orders.json")
 
 
 def load_orders() -> list[dict]:
-    with ORDERS_FILE.open(encoding="utf-8") as file:
-        return json.load(file)
+    try:
+        with ORDERS_FILE.open(encoding="utf-8") as file:
+            return json.load(file)
+    except FileNotFoundError:
+        raise RuntimeError(f"找不到订单数据文件：{ORDERS_FILE}")
+    except json.JSONDecodeError as error:
+        raise RuntimeError(f"订单数据文件格式错误：{ORDERS_FILE}") from error
 
 
 ORDERS = load_orders()
