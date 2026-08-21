@@ -108,5 +108,17 @@ def ask_agent(user_question: str) -> str:
 
 
 if __name__ == "__main__":
-    user_question = input("请输入订单问题：")
-    print(ask_agent(user_question))
+    print("订单 Agent 已启动。输入“退出”可结束。")
+
+    while True:
+        user_question = input("请输入订单问题：").strip()
+
+        if user_question in {"退出", "exit", "quit"}:
+            print("订单 Agent 已退出。")
+            break
+
+        if not user_question:
+            print("问题不能为空。")
+            continue
+
+        print(ask_agent(user_question))
