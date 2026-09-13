@@ -19,8 +19,8 @@ def load_orders() -> list[dict]:
 
 
 def get_order_summary(minimum_amount: float) -> dict:
-    orders = load_orders()
     """返回金额不少于指定门槛的订单统计信息。"""
+    orders = load_orders()
     matched_orders = [order for order in orders if order["amount"] >= minimum_amount]
 
     return {
