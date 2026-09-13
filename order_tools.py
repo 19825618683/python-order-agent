@@ -15,12 +15,13 @@ def load_orders() -> list[dict]:
         raise RuntimeError(f"订单数据文件格式错误：{ORDERS_FILE}") from error
 
 
-ORDERS = load_orders()
+
 
 
 def get_order_summary(minimum_amount: float) -> dict:
+    orders = load_orders()
     """返回金额不少于指定门槛的订单统计信息。"""
-    matched_orders = [order for order in ORDERS if order["amount"] >= minimum_amount]
+    matched_orders = [order for order in orders if order["amount"] >= minimum_amount]
 
     return {
         "minimum_amount": minimum_amount,
@@ -30,7 +31,7 @@ def get_order_summary(minimum_amount: float) -> dict:
     }
 
 def get_order_by_id(order_id: int) -> dict:
-    for order in ORDERS:
+    for order in load_orders():
         if order["id"] == order_id:
             return order
 
